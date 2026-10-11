@@ -1,9 +1,35 @@
 <?xml version="1.0" encoding="utf-8"?>
+<!-- Material 3 light color scheme (fallback for pre-Android 12; dynamic color overrides on 12+) -->
 <resources>
-    <color name="colorPrimary">#4fc3f7</color>
-    <color name="colorPrimaryDark">#0093c4</color>
-    <color name="colorPrimaryLight">#8bf6ff</color>
-    <color name="colorAccent">#ce93d8</color>
-    <color name="colorAccentDark">#883997</color>
-    <color name="colorAccentLight">#ee98fb</color>
+    <color name="md_primary">#0061A4</color>
+    <color name="md_on_primary">#FFFFFF</color>
+    <color name="md_primary_container">#D1E4FF</color>
+    <color name="md_on_primary_container">#001D36</color>
+    <color name="md_secondary">#565E71</color>
+    <color name="md_on_secondary">#FFFFFF</color>
+    <color name="md_secondary_container">#DAE2F9</color>
+    <color name="md_on_secondary_container">#131C2B</color>
+    <color name="md_tertiary">#71557E</color>
+    <color name="md_on_tertiary">#FFFFFF</color>
+    <color name="md_tertiary_container">#F9D8FF</color>
+    <color name="md_on_tertiary_container">#291337</color>
+    <color name="md_error">#BA1A1A</color>
+    <color name="md_on_error">#FFFFFF</color>
+    <color name="md_error_container">#FFDAD6</color>
+    <color name="md_on_error_container">#410002</color>
+    <color name="md_background">#FAF9FD</color>
+    <color name="md_on_background">#1A1B20</color>
+    <color name="md_surface">#FAF9FD</color>
+    <color name="md_on_surface">#1A1B20</color>
+    <color name="md_surface_variant">#E1E2EC</color>
+    <color name="md_on_surface_variant">#44474E</color>
+    <color name="md_outline">#74777F</color>
+    <color name="md_outline_variant">#C4C6D0</color>
+    <color name="md_surface_dim">#D9D9E0</color>
+    <color name="md_surface_bright">#FAF9FD</color>
+    <color name="md_surface_container_lowest">#FFFFFF</color>
+    <color name="md_surface_container_low">#F4F3FA</color>
+    <color name="md_surface_container">#EEEDF4</color>
+    <color name="md_surface_container_high">#E8E8EE</color>
+    <color name="md_surface_container_highest">#E3E2E9</color>
 </resources>

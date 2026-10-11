@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content">
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
 
     <TextView
         android:id="@+id/download_path_tv"
@@ -10,4 +11,13 @@
         android:layout_marginStart="30dp"
         android:layout_marginTop="10dp"
         android:text="@string/val_not_set" />
-</RelativeLayout>
+
+    <com.google.android.material.checkbox.MaterialCheckBox
+        android:id="@+id/embed_subs_cb"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="12dp"
+        android:layout_marginEnd="20dp"
+        android:text="@string/embed_subs" />
+</LinearLayout>

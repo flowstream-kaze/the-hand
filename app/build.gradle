@@ -1,35 +1,34 @@
 apply plugin: 'com.android.application'
 apply plugin: 'kotlin-android'
-apply plugin: 'kotlin-android-extensions'
-apply plugin: 'kotlin-kapt'
+apply plugin: 'com.google.devtools.ksp'
 
-def versionMajor = 0
-def versionMinor = 1
-def versionPatch = 5
-def versionBuild = 0 // bump for dogfood builds, public betas, etc.
+def versionMajor = 1
+def versionMinor = 0
+def versionPatch = 0
+def versionBuild = 12 // sequential release number (r1, r2, ...) — bump on every release
 
 android {
-    compileSdkVersion 29
-    buildToolsVersion "29.0.3"
+    namespace 'org.dlget'
+    compileSdkVersion 35
+
     defaultConfig {
-        applicationId "org.yausername.dvd"
-        minSdkVersion 21
-        //noinspection ExpiredTargetSdkVersion
-        targetSdkVersion 29
+        applicationId "org.dlget"
+        minSdkVersion 23
+        targetSdkVersion 34
         versionCode versionMajor * 1000000 + versionMinor * 10000 + versionPatch * 100 + versionBuild
-        versionName "${versionMajor}.${versionMinor}.${versionPatch}"
+        // versionName tracks the release number so the version shown by Android
+        // can never drift from the rN release numbering (r4 -> "1.4")
+        versionName "${versionMajor}.${versionBuild}"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
 
-        kapt {
-            arguments {
-                arg("room.schemaLocation", "$projectDir/schemas")
-            }
+        ksp {
+            arg("room.schemaLocation", "$projectDir/schemas")
         }
 
         ndk {
             abiFilters = []
-            abiFilters.addAll(ABI_FILTERS.split(';').collect{it as String})
+            abiFilters.addAll(ABI_FILTERS.split(';').collect { it as String })
         }
     }
 
@@ -41,15 +40,26 @@ android {
     }
 
     compileOptions {
-        sourceCompatibility JavaVersion.VERSION_1_8
-        targetCompatibility JavaVersion.VERSION_1_8
+        sourceCompatibility JavaVersion.VERSION_17
+        targetCompatibility JavaVersion.VERSION_17
     }
 
     kotlinOptions {
-        jvmTarget = JavaVersion.VERSION_1_8.toString()
+        jvmTarget = JavaVersion.VERSION_17.toString()
     }
 
-    lintOptions {
+    buildFeatures {
+        viewBinding true
+        buildConfig true
+    }
+
+    packagingOptions {
+        jniLibs {
+            useLegacyPackaging true
+        }
+    }
+
+    lint {
         abortOnError false
         checkReleaseBuilds false
     }
@@ -62,54 +72,51 @@ android {
             universalApk true
         }
     }
-
 }
 
 dependencies {
-    def nav_version = "2.3.0-rc01"
-    def material_version = "1.3.0-alpha01"
-    def room_version = "2.2.5"
-    def arch_lifecycle_version = "2.2.0"
-    def coroutines_version = "1.3.4"
-    def work_version = "2.3.4"
-    def picassoVersion = "2.71828"
-    def commonsIoVer = "2.5"
+    def nav_version = "2.7.7"
+    def material_version = "1.12.0"
+    def room_version = "2.7.2"
+    def lifecycle_version = "2.8.4"
+    def coroutines_version = "1.8.1"
+    def work_version = "2.11.2"
+    def coil_version = "2.6.0"
+    def commonsIoVer = "2.16.1"
 
     implementation fileTree(dir: 'libs', include: ['*.jar'])
-    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
     // Kotlin components
     api "org.jetbrains.kotlinx:kotlinx-coroutines-core:$coroutines_version"
     api "org.jetbrains.kotlinx:kotlinx-coroutines-android:$coroutines_version"
-    implementation 'androidx.appcompat:appcompat:1.1.0'
-    implementation 'androidx.core:core-ktx:1.3.0'
-    implementation 'androidx.constraintlayout:constraintlayout:2.0.0-beta7'
+    implementation 'androidx.appcompat:appcompat:1.7.0'
+    implementation 'androidx.core:core-ktx:1.13.1'
+    implementation 'androidx.constraintlayout:constraintlayout:2.1.4'
     implementation "androidx.navigation:navigation-fragment-ktx:$nav_version"
     implementation "androidx.navigation:navigation-ui-ktx:$nav_version"
     implementation "com.google.android.material:material:$material_version"
-    implementation "androidx.preference:preference:1.1.1"
+    implementation "androidx.preference:preference:1.2.1"
 
     implementation "androidx.room:room-runtime:$room_version"
-    kapt "androidx.room:room-compiler:$room_version"
+    ksp "androidx.room:room-compiler:$room_version"
     implementation "androidx.room:room-ktx:$room_version"
 
     // Lifecycle components
-    implementation "androidx.lifecycle:lifecycle-common-java8:$arch_lifecycle_version"
-    implementation "androidx.lifecycle:lifecycle-viewmodel-ktx:$arch_lifecycle_version"
-    implementation "androidx.lifecycle:lifecycle-livedata-ktx:$arch_lifecycle_version"
-    implementation "androidx.lifecycle:lifecycle-viewmodel-savedstate:$arch_lifecycle_version"
+    implementation "androidx.lifecycle:lifecycle-runtime-ktx:$lifecycle_version"
+    implementation "androidx.lifecycle:lifecycle-viewmodel-ktx:$lifecycle_version"
 
     implementation "androidx.work:work-runtime-ktx:$work_version"
 
-    implementation "com.github.yausername.youtubedl-android:library:3a0252d88b4ae573068c63c3d08fc52c66102d55"
-    implementation "com.github.yausername.youtubedl-android:ffmpeg:3a0252d88b4ae573068c63c3d08fc52c66102d55"
+    // JitPack purged the 'common' artifact this POM depends on -> exclude and use local :common module
+    implementation project(':library')
+    implementation project(':common')
+    implementation project(':ffmpeg')
 
-    implementation "com.squareup.picasso:picasso:$picassoVersion"
+    implementation "io.coil-kt:coil:$coil_version"
 
     implementation group: 'commons-io', name: 'commons-io', version: "$commonsIoVer"
 
-    implementation 'androidx.legacy:legacy-support-v4:1.0.0'
-    implementation 'androidx.recyclerview:recyclerview:1.1.0'
-    testImplementation 'junit:junit:4.12'
-    androidTestImplementation 'androidx.test.ext:junit:1.1.1'
-    androidTestImplementation 'androidx.test.espresso:espresso-core:3.2.0'
+    implementation 'androidx.recyclerview:recyclerview:1.3.2'
+    testImplementation 'junit:junit:4.13.2'
+    androidTestImplementation 'androidx.test.ext:junit:1.2.1'
+    androidTestImplementation 'androidx.test.espresso:espresso-core:3.6.1'
 }

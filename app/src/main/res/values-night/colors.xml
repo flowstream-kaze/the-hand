@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Material 3 dark color scheme (fallback for pre-Android 12; dynamic color overrides on 12+) -->
+<resources>
+    <color name="md_primary">#A8CDFF</color>
+    <color name="md_on_primary">#003259</color>
+    <color name="md_primary_container">#00497D</color>
+    <color name="md_on_primary_container">#D1E4FF</color>
+    <color name="md_secondary">#BEC6DC</color>
+    <color name="md_on_secondary">#283141</color>
+    <color name="md_secondary_container">#3E4759</color>
+    <color name="md_on_secondary_container">#DAE2F9</color>
+    <color name="md_tertiary">#E0B9E9</color>
+    <color name="md_on_tertiary">#402A4E</color>
+    <color name="md_tertiary_container">#583E66</color>
+    <color name="md_on_tertiary_container">#F9D8FF</color>
+    <color name="md_error">#FFB4AB</color>
+    <color name="md_on_error">#690005</color>
+    <color name="md_error_container">#93000A</color>
+    <color name="md_on_error_container">#FFDAD6</color>
+    <color name="md_background">#1A1B20</color>
+    <color name="md_on_background">#E3E2E9</color>
+    <color name="md_surface">#1A1B20</color>
+    <color name="md_on_surface">#E3E2E9</color>
+    <color name="md_surface_variant">#44474E</color>
+    <color name="md_on_surface_variant">#C4C6D0</color>
+    <color name="md_outline">#8E9099</color>
+    <color name="md_outline_variant">#44474E</color>
+    <color name="md_surface_dim">#1A1B20</color>
+    <color name="md_surface_bright">#41434A</color>
+    <color name="md_surface_container_lowest">#14151A</color>
+    <color name="md_surface_container_low">#222328</color>
+    <color name="md_surface_container">#26272C</color>
+    <color name="md_surface_container_high">#313237</color>
+    <color name="md_surface_container_highest">#3B3C42</color>
+</resources>

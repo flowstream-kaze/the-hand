@@ -1,0 +1,23 @@
+apply plugin: 'com.android.library'
+
+android {
+    namespace 'com.yausername.ffmpeg'
+    compileSdkVersion 34
+
+    defaultConfig {
+        minSdkVersion 21
+    }
+
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_17
+        targetCompatibility JavaVersion.VERSION_17
+    }
+}
+
+dependencies {
+    implementation 'androidx.annotation:annotation:1.8.1'
+    implementation project(':common')
+    // Only YoutubeDLException is referenced; the real dep comes in via :app
+    compileOnly project(':library')
+    implementation 'commons-io:commons-io:2.16.1'
+}

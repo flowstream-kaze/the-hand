@@ -1,9 +1,10 @@
 <resources>
-    <string name="app_name" translatable="false">dvd</string>
+    <string name="app_name" translatable="false">The Hand</string>
     <string name="val_not_set">Not set</string>
-    <string name="start_how_to">Paste a video link in the search bar</string>
+    <string name="start_how_to">Tap here to search, or share a video to The Hand</string>
     <string name="youtubedl_commands">yt-dlp commands</string>
-    <string name="sample_command" translatable="false">--extract-audio --audio-format mp3 -o /sdcard/Download/youtubedl-android/%(title)s.%(ext)s https://www.youtube.com/watch?v=dQw4w9WgXcQ</string>
+    <string name="youtubedl_commands_hint">Run an arbitrary yt-dlp command on this device. Commands run in the background with a progress notification.</string>
+    <string name="youtubedl_command_hint">yt-dlp command</string>
     <string name="execute">execute</string>
     <string name="home">Home</string>
     <string name="downloads">Downloads</string>
@@ -20,7 +21,6 @@
     <string name="download_already_running">A download is already running</string>
     <string name="download_queued">Download queued. Check notification for progress</string>
     <string name="invalid_download_location">Invalid download location</string>
-    <string name="choose_download_location_title">Choose directory</string>
     <string name="invalid_url">Invalid url</string>
     <string name="theme_light">Light</string>
     <string name="theme_dark">Dark</string>
@@ -32,24 +32,60 @@
     <string name="command_already_running">A command is already running</string>
     <string name="command_queued">Command queued. Check notification for progress</string>
     <string name="command_noti_title">yt-dlp command</string>
+    <string name="command_failed">Command failed</string>
+    <string name="update_failed">yt-dlp update failed</string>
+    <string name="removed_entry">Removed %1$s from the list</string>
+    <string name="about_key">about_key</string>
+    <string name="about_summary">The Hand %1$s - based on github.com/yausername/dvd</string>
+    <string name="embed_subs">Embed English subtitles</string>
+    <string name="clear_history">Clear download history</string>
+    <string name="select_entries">Select entries</string>
+    <string name="remove_from_list">Remove from list</string>
+    <string name="remove_entries_message">Only the list entries are removed. Downloaded files are kept, and active downloads continue.</string>
+    <string name="more_actions">More actions</string>
+    <plurals name="entries_selected">
+        <item quantity="one">%d selected</item>
+        <item quantity="other">%d selected</item>
+    </plurals>
+    <plurals name="remove_entries_title">
+        <item quantity="one">Remove %d entry?</item>
+        <item quantity="other">Remove %d entries?</item>
+    </plurals>
+    <plurals name="entries_removed">
+        <item quantity="one">Removed %d entry from the list</item>
+        <item quantity="other">Removed %d entries from the list</item>
+    </plurals>
+    <string name="action_clear">Clear</string>
+    <string name="no_failure_reason">No reason was recorded for this download.</string>
+    <string name="redownload">Redownload</string>
+    <string name="redownload_unavailable">This entry cannot be redownloaded - share the link again</string>
+    <string name="not_enough_space">Not enough storage space: this download needs about %1$s free, only %2$s free</string>
+    <string name="clear_history_title">Clear download history?</string>
+    <string name="clear_history_message">Removes every entry from this list. Downloaded files are kept; downloads still in progress are cancelled.</string>
+    <string name="history_cleared">Download history cleared</string>
     <string name="command_noti_text">Running command</string>
-    <string name="download_noti_channel_name">dvd download</string>
+    <string name="download_noti_channel_name">The Hand downloads</string>
     <string name="download_start">Starting download</string>
+    <string name="download_complete">Download complete</string>
+    <string name="download_failed">Download failed</string>
     <string name="youtubedl_update">Update yt-dlp</string>
     <string name="youtubedl_update_noti_title">Updating yt-dlp</string>
     <string name="youtubedl_update_noti_channel_name">yt-dlp update</string>
     <string name="already_updated">Already up to date</string>
     <string name="updated_successful">Update successful</string>
     <string name="command_noti_channel_name">yt-dlp command</string>
-    <string name="fps_value">%d fps</string>
-    <string name="abr_value">%d abr</string>
-    <string name="duration">%d:%d</string>
+    <string name="bullet" translatable="false">•</string>
+    <string name="audio_mp3_label">Audio · mp3 · best quality</string>
+    <string name="audio_mp3_sub">extracted with ffmpeg</string>
+    <string name="download_failed_short">Failed</string>
+    <string name="duration">%1$d:%2$02d</string>
     <string name="nav_graph_label_downloads">Downloads</string>
     <string name="nav_graph_label_settings">Settings</string>
     <string name="nav_graph_label_ytdlp">yt-dlp</string>
     <string name="share">Share</string>
-    <string name="delete">Delete</string>
+    <string name="delete">Remove from list</string>
     <string name="file_cannot_be_shared">This file cannot be shared.</string>
     <string name="download_cancelled">Download task cancelled</string>
     <string name="cancel_download">Cancel download</string>
+    <string name="recommended">Recommended</string>
 </resources>
