@@ -126,5 +126,8 @@ rm -f "$BUILD/payload.7z" "$OUTPUT"
 )
 cat "$BUILD/sfx.exe" "$BUILD/payload.7z" > "$OUTPUT"
 chmod +x "$OUTPUT"
-sha256sum "$OUTPUT" | tee "$OUTPUT.sha256"
+(
+  cd "$DIST"
+  sha256sum "$(basename "$OUTPUT")" | tee "$(basename "$OUTPUT").sha256"
+)
 echo "Built $OUTPUT ($(du -h --apparent-size "$OUTPUT" | cut -f1))"
