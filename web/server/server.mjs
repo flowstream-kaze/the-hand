@@ -237,25 +237,25 @@ async function startJob(job) {
   activeJobs += 1;
   job.status = 'running';
   job.updatedAt = Date.now();
-  await mkdir(job.dir, { recursive: true });
-  const args = [
-    '--no-playlist',
-    '--no-cache-dir',
-    '--newline',
-    '--socket-timeout', '15',
-    '--retries', '10',
-    '--fragment-retries', '10',
-    '--concurrent-fragments', '4',
-    '--max-filesize', String(MAX_BYTES),
-    '--progress-template', 'download:THPROGRESS|%(progress.downloaded_bytes)s|%(progress.total_bytes)s|%(progress.total_bytes_estimate)s|%(progress._percent_str)s|%(progress._speed_str)s|%(progress._eta_str)s',
-    '--paths', job.dir,
-    '--output', '%(title).180B [%(id)s].%(ext)s',
-    '-f', job.option.formatSpec,
-  ];
-  if (job.option.kind === 'audio') args.push('--extract-audio', '--audio-format', 'mp3');
-  args.push('--', job.url);
-
   try {
+    await mkdir(job.dir, { recursive: true });
+    const args = [
+      '--no-playlist',
+      '--no-cache-dir',
+      '--newline',
+      '--socket-timeout', '15',
+      '--retries', '10',
+      '--fragment-retries', '10',
+      '--concurrent-fragments', '4',
+      '--max-filesize', String(MAX_BYTES),
+      '--progress-template', 'download:THPROGRESS|%(progress.downloaded_bytes)s|%(progress.total_bytes)s|%(progress.total_bytes_estimate)s|%(progress._percent_str)s|%(progress._speed_str)s|%(progress._eta_str)s',
+      '--paths', job.dir,
+      '--output', '%(title).180B [%(id)s].%(ext)s',
+      '-f', job.option.formatSpec,
+    ];
+    if (job.option.kind === 'audio') args.push('--extract-audio', '--audio-format', 'mp3');
+    args.push('--', job.url);
+
     const command = await commandFor(args);
     const child = spawn(command.command, command.args, {
       stdio: ['ignore', 'pipe', 'pipe'],
