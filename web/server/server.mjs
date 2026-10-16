@@ -15,8 +15,9 @@ import {
 
 const WEB_ROOT = resolve(fileURLToPath(new URL('../public/', import.meta.url)));
 const DATA_ROOT = resolve(process.env.DATA_DIR || '/tmp/the-hand-web');
-const HOST = process.env.HOST || '127.0.0.1';
-const PORT = Number(process.env.PORT || 8787);
+const PORTABLE_MODE = process.env.PORTABLE_MODE === '1';
+const HOST = PORTABLE_MODE ? '127.0.0.1' : (process.env.HOST || '127.0.0.1');
+const PORT = Number(process.env.PORT ?? 8787);
 const MAX_ACTIVE = Math.max(1, Number(process.env.MAX_ACTIVE_JOBS || 2));
 const MAX_BYTES = Math.max(50 * 1024 * 1024, Number(process.env.MAX_DOWNLOAD_BYTES || 4 * 1024 ** 3));
 const INFO_TTL = 10 * 60_000;
@@ -27,6 +28,8 @@ const jobs = new Map();
 const queue = [];
 const requests = new Map();
 let activeJobs = 0;
+let activeTransfers = 0;
+let lastActivity = Date.now();
 
 function findYtDlp() {
   if (process.env.YTDLP_PATH) return resolve(process.env.YTDLP_PATH);
@@ -140,8 +143,25 @@ async function runCapture(args, timeoutMs = 60_000) {
 function killProcess(child, signal = 'SIGTERM') {
   if (!child?.pid) return;
   try {
-    if (process.platform !== 'win32') process.kill(-child.pid, signal);
-    else child.kill(signal);
+    if (process.platform !== 'win32') {
+      process.kill(-child.pid, signal);
+      return;
+    }
+    // yt-dlp may have ffmpeg children. Node signals only the immediate process on
+    // Windows, so terminate the full process tree instead of orphaning a tool.
+    const killer = spawn('taskkill.exe', ['/pid', String(child.pid), '/t', '/f'], {
+      detached: true,
+      stdio: 'ignore',
+      windowsHide: true,
+    });
+    killer.on('error', () => {
+      try {
+        child.kill(signal);
+      } catch {
+        // Process already exited.
+      }
+    });
+    killer.unref();
   } catch {
     // Process already exited.
   }
@@ -307,6 +327,7 @@ async function startJob(job) {
     }
   } finally {
     job.updatedAt = Date.now();
+    if (job.status === 'cancelled') await removeJobDirectory(job.dir);
     activeJobs -= 1;
     pumpQueue();
   }
@@ -352,19 +373,29 @@ async function createJob(lookupId, optionId) {
   return publicJob(job);
 }
 
+async function removeJobDirectory(path) {
+  for (let attempt = 0; attempt < 8; attempt += 1) {
+    try {
+      await rm(path, { recursive: true, force: true });
+      return;
+    } catch (error) {
+      if (!['EBUSY', 'EPERM', 'ENOTEMPTY'].includes(error?.code) || attempt === 7) return;
+      await new Promise((resolvePromise) => setTimeout(resolvePromise, 500));
+    }
+  }
+}
+
 async function cancelAndRemove(job) {
-  if (job.child) {
-    killProcess(job.child, 'SIGTERM');
-    setTimeout(() => {
-      killProcess(job.child, 'SIGKILL');
-      void rm(job.dir, { recursive: true, force: true });
-    }, 3000).unref();
+  const child = job.child;
+  if (child) {
+    killProcess(child, 'SIGTERM');
+    setTimeout(() => killProcess(child, 'SIGKILL'), 3000).unref();
   }
   job.status = 'cancelled';
   job.updatedAt = Date.now();
   const queuedIndex = queue.indexOf(job);
   if (queuedIndex >= 0) queue.splice(queuedIndex, 1);
-  await rm(job.dir, { recursive: true, force: true });
+  await removeJobDirectory(job.dir);
 }
 
 async function serveFile(res, job) {
@@ -384,8 +415,20 @@ async function serveFile(res, job) {
     'Content-Disposition': `attachment; filename="${job.fileName.replace(/["\\]/g, '_')}"; filename*=UTF-8''${encoded}`,
     'Cache-Control': 'private, no-store',
   });
+  activeTransfers += 1;
+  let transferFinished = false;
+  const finishTransfer = () => {
+    if (transferFinished) return;
+    transferFinished = true;
+    activeTransfers -= 1;
+    lastActivity = Date.now();
+  };
+  res.on('close', finishTransfer);
   const stream = createReadStream(job.filePath);
-  stream.on('error', () => res.destroy());
+  stream.on('error', () => {
+    finishTransfer();
+    res.destroy();
+  });
   stream.pipe(res);
 }
 
@@ -419,6 +462,7 @@ async function serveStatic(pathname, res, headOnly = false) {
 }
 
 async function route(req, res) {
+  lastActivity = Date.now();
   const requestUrl = new URL(req.url || '/', `http://${req.headers.host || 'localhost'}`);
   const pathname = requestUrl.pathname;
   if (rateLimited(req, 'all', 240)) {
@@ -481,6 +525,10 @@ const server = createServer((req, res) => {
 
 const cleanup = setInterval(async () => {
   const now = Date.now();
+  if (PORTABLE_MODE && activeJobs === 0 && activeTransfers === 0 && now - lastActivity > 15 * 60_000) {
+    shutdown();
+    return;
+  }
   for (const [id, lookupEntry] of lookups) {
     if (now - lookupEntry.createdAt > INFO_TTL) lookups.delete(id);
   }
@@ -509,5 +557,17 @@ process.on('SIGINT', shutdown);
 process.on('SIGTERM', shutdown);
 
 server.listen(PORT, HOST, () => {
-  console.log(`The Hand web is listening on http://${HOST}:${PORT}`);
+  const address = server.address();
+  const actualPort = typeof address === 'object' && address ? address.port : PORT;
+  const url = `http://${HOST}:${actualPort}`;
+  console.log(`The Hand web is listening on ${url}`);
+  if (PORTABLE_MODE && process.platform === 'win32') {
+    const opener = spawn('rundll32.exe', ['url.dll,FileProtocolHandler', url], {
+      detached: true,
+      stdio: 'ignore',
+      windowsHide: true,
+    });
+    opener.on('error', (error) => console.error(`Unable to open the browser: ${error.message}`));
+    opener.unref();
+  }
 });

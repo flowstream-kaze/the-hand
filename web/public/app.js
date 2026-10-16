@@ -271,3 +271,8 @@ retryButton.addEventListener('click', () => {
   startButton.disabled = false;
   results.scrollIntoView({ behavior: 'smooth', block: 'start' });
 });
+
+// Keeps the hidden portable server alive only while this page remains open.
+setInterval(() => {
+  fetch('/api/health', { cache: 'no-store' }).catch(() => {});
+}, 60_000);

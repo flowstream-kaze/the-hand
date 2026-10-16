@@ -14,3 +14,6 @@
 .cxx
 web/data/
 web/node_modules/
+web/portable/.cache/
+web/portable/.build/
+web/portable/dist/

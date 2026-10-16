@@ -13,6 +13,10 @@ A private, server-backed web interface for The Hand. Browser JavaScript cannot r
 - Temporary downloads removed after the retention window
 - Responsive installable web UI
 
+## Portable Windows executable
+
+Release r13 is also available as one self-contained Windows 10/11 x64 executable. It bundles Node.js, yt-dlp, FFmpeg, and FFprobe, opens this interface on a random localhost port, and requires no installation. See [`portable/README.md`](portable/README.md).
+
 ## Requirements
 
 - Node.js 20+

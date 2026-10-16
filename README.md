@@ -14,7 +14,7 @@ The project targets Android 14 and builds separate APKs for arm64-v8a, armeabi-v
 
 ## Web app
 
-The focused web version lives in [`web/`](web/README.md). It provides URL lookup, curated video qualities, MP3 extraction, progress, cancellation, and temporary browser downloads.
+The focused web version lives in [`web/`](web/README.md). It provides URL lookup, curated video qualities, MP3 extraction, progress, cancellation, and temporary browser downloads. Release r13 also packages it as one self-contained Windows x64 executable; see [`web/portable/`](web/portable/README.md).
 
 Run it locally from the repository root:
 
