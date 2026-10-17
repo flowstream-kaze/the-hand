@@ -12,18 +12,9 @@ JAVA_HOME=/opt/jdk-21 ANDROID_HOME=/opt/android-sdk ./gradlew assembleDebug
 
 The project targets Android 14 and builds separate APKs for arm64-v8a, armeabi-v7a, x86, and x86_64.
 
-## Web app
+## Windows version
 
-The focused web version lives in [`web/`](web/README.md). It provides URL lookup, curated video qualities, MP3 extraction, progress, cancellation, and temporary browser downloads. Release r13 also packages it as one self-contained Windows x64 executable; see [`web/portable/`](web/portable/README.md).
-
-Run it locally from the repository root:
-
-```bash
-node web/server/server.mjs
-# open http://127.0.0.1:8787
-```
-
-Or build the isolated container with `docker compose -f web/compose.yaml up --build`. The Compose port binds only to localhost by default; put an authenticated private proxy or Tailscale Serve in front of it rather than exposing it directly to the public internet.
+The Windows application now has its own private repository and release history at [`flowstream-kaze/the-hand-windows`](https://github.com/flowstream-kaze/the-hand-windows).
 
 ## Source and license
 
