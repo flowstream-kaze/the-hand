@@ -12,6 +12,14 @@ JAVA_HOME=/opt/jdk-21 ANDROID_HOME=/opt/android-sdk ./gradlew assembleDebug
 
 The project targets Android 14 and builds separate APKs for arm64-v8a, armeabi-v7a, x86, and x86_64. Production APKs use a signing lineage so they can update installations from the earlier debug-signed releases; see [`SIGNING.md`](SIGNING.md) and `scripts/build-signed-release.sh`.
 
+## App icon
+
+`branding/the-hand-icon-1024.png` is the single artwork source for every launcher asset. Regenerate the adaptive foreground, themed monochrome layer, and all legacy densities with:
+
+    python3 branding/generate-icons.py branding/the-hand-icon-1024.png
+
+The web and PWA sizes in the Windows repository are derived from the same master.
+
 ## Windows version
 
 The Windows application has its own repository and release history at [`flowstream-kaze/the-hand-windows`](https://github.com/flowstream-kaze/the-hand-windows).
