@@ -10,7 +10,7 @@ The Hand can receive shared links or search pasted URLs, offers a concise qualit
 JAVA_HOME=/opt/jdk-21 ANDROID_HOME=/opt/android-sdk ./gradlew assembleDebug
 ```
 
-The project targets Android 14 and builds separate APKs for arm64-v8a, armeabi-v7a, x86, and x86_64.
+The project targets Android 14 and builds separate APKs for arm64-v8a, armeabi-v7a, x86, and x86_64. Production APKs use a signing lineage so they can update installations from the earlier debug-signed releases; see [`SIGNING.md`](SIGNING.md) and `scripts/build-signed-release.sh`.
 
 ## Windows version
 

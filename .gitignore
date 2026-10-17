@@ -12,3 +12,10 @@
 /captures
 .externalNativeBuild
 .cxx
+/release/
+*.jks
+*.keystore
+*.p12
+*.pfx
+*.lineage
+signing.properties
