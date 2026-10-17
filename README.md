@@ -14,7 +14,7 @@ The project targets Android 14 and builds separate APKs for arm64-v8a, armeabi-v
 
 ## Windows version
 
-The Windows application now has its own private repository and release history at [`flowstream-kaze/the-hand-windows`](https://github.com/flowstream-kaze/the-hand-windows).
+The Windows application has its own repository and release history at [`flowstream-kaze/the-hand-windows`](https://github.com/flowstream-kaze/the-hand-windows).
 
 ## Source and license
 
